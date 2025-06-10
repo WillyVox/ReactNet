@@ -34,7 +34,7 @@ namespace ReactNet
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "ClientApp/dist";
             });
         }
 
@@ -78,7 +78,8 @@ namespace ReactNet
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseReactDevelopmentServer(npmScript: "start");
+                    // spa.UseReactDevelopmentServer(npmScript: "dev");
+                    spa.UseProxyToSpaDevelopmentServer("http://localhost:5173"); // Vite's default dev port
                 }
             });
         }
