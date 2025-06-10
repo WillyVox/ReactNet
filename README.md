@@ -1,6 +1,6 @@
 ### ReactNet Application
 
-Build React app inside .NET
+Build React app with a .NET backend
 
 ### Creating app
     
@@ -9,5 +9,7 @@ Build React app inside .NET
     $ dotnet new install Microsoft.DotNet.Web.Spa.ProjectTemplates
 
     2. $ dotnet run
+    https://localhost:5001/
 
-    
+### Swagger Configuration
+    1. https://localhost:5001/swagger/index.html

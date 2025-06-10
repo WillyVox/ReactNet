@@ -21,8 +21,15 @@ namespace ReactNet
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews(); // or AddMvc() if needed
-            // No need to set EnableEndpointRouting = false
-            // services.AddMvc().SetCompatibilityVersion();
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "ReactNet API",
+                    Version = "v1"
+                });
+            });
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -49,6 +56,14 @@ namespace ReactNet
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseRouting();
+            
+            // ✅ Swagger middleware
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ReactNet API V1");
+                c.RoutePrefix = "swagger";
+            });
 
             app.UseEndpoints(endpoints =>
             {
