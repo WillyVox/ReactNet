@@ -7,17 +7,24 @@ echo "Running dotnet format check for staged files..."
 # --cached: look at staged files
 # --name-only: just list names
 # --diff-filter=ACM: only A(dded), C(opied), M(odified) files
-echo "HEHEHEHE."
-# FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$')
-echo "HEHEHEH 33333"
-# Define your solution or project file path relative to the repo root
-SOLUTION_PATH="ReactNet.csproj"
+echo "Listing all staged files:"
+git diff --cached --name-only --diff-filter=ACM
+
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -Ei '\.cs$' || true)
 
 # Check if there are any staged C# files
 if [ -z "$FILES" ]; then
   echo "No .cs files staged. Skipping dotnet format check."
   exit 0 # Allow the commit
 fi
+
+echo "Filtered .cs staged files:"
+echo "$FILES"
+
+echo "Show Me!"
+
+# Define your solution or project file path relative to the repo root
+SOLUTION_PATH="ReactNet.csproj"
 
 # Use 'tr' to convert newlines to spaces for --include
 INCLUDED_FILES_ARG=$(echo "$FILES" | tr '\n' ' ')
