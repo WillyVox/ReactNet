@@ -8,8 +8,8 @@ const FetchData = () => {
 
   useEffect(() => {
     fetch('api/SampleData/WeatherForecasts')
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         setData({ forecasts: data, loading: false });
       });
   }, []);
@@ -32,7 +32,7 @@ const FetchData = () => {
         </tr>
       </thead>
       <tbody>
-        {data.forecasts.map((forecast) => (
+        {data.forecasts.map(forecast => (
           <tr key={forecast.dateFormatted}>
             <td>{forecast.dateFormatted}</td>
             <td>{forecast.temperatureC}</td>

@@ -1,50 +1,86 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh" # If using Husky
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
-echo "Running dotnet format check for staged files..."
+# --- .NET Project Checks ---
+echo "--- Running .NET Code Formatting Check ---"
+
+# Define your .NET solution or project file path relative to the repo root
+# IMPORTANT: Adjust this path to correctly point to your main solution/project
+DOTNET_SOLUTION_PATH="ReactNet.csproj" 
 
 # Get list of staged C# files
-# --cached: look at staged files
-# --name-only: just list names
-# --diff-filter=ACM: only A(dded), C(opied), M(odified) files
-echo "Listing all staged files:"
-git diff --cached --name-only --diff-filter=ACM
+DOTNET_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$' || true)
 
-FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -Ei '\.cs$' || true)
+if [ -n "$DOTNET_FILES" ]; then
+  echo "Checking staged .cs files..."
+  # Use 'tr' to convert newlines to spaces for --include
+  INCLUDED_DOTNET_FILES_ARG=$(echo "$DOTNET_FILES" | tr '\n' ' ')
 
-# Check if there are any staged C# files
-if [ -z "$FILES" ]; then
-  echo "No .cs files staged. Skipping dotnet format check."
-  exit 0 # Allow the commit
+  # The actual dotnet format command
+  # (Using the corrected version after troubleshooting the --include-generated-files issue)
+  COMMAND_DOTNET_FORMAT="dotnet format \"$DOTNET_SOLUTION_PATH\" --verify-no-changes --include \"$INCLUDED_DOTNET_FILES_ARG\""
+
+  echo "Executing: $COMMAND_DOTNET_FORMAT"
+  eval "$COMMAND_DOTNET_FORMAT"
+
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "==================================================="
+    echo "  .NET Code formatting issues detected."
+    echo "  Please run 'dotnet format' in the repo root to fix."
+    echo "==================================================="
+    exit 1 # Abort the commit
+  fi
+else
+  echo "No .cs files staged. Skipping .NET format check."
 fi
 
-echo "Filtered .cs staged files:"
-echo "$FILES"
+# --- Frontend (React/TypeScript) Project Checks ---
+echo "--- Running Frontend Code Checks ---"
 
-echo "Show Me!"
+# Change directory to your ClientApp
+# IMPORTANT: Adjust this path if your frontend app is not directly in ClientApp
+CLIENT_APP_DIR="ClientApp"
 
-# Define your solution or project file path relative to the repo root
-SOLUTION_PATH="ReactNet.csproj"
+if [ -d "$CLIENT_APP_DIR" ]; then # Check if the directory exists
+  echo "Changing directory to $CLIENT_APP_DIR..."
+  cd "$CLIENT_APP_DIR" || exit 1 # Exit if cd fails
 
-# Use 'tr' to convert newlines to spaces for --include
-INCLUDED_FILES_ARG=$(echo "$FILES" | tr '\n' ' ')
+  # --- lint-staged (ESLint & Prettier) ---
+  echo "Running lint-staged (ESLint & Prettier) check..."
+  # It's important to run npm scripts from within the ClientApp directory
+  npm run prettier
 
-# Construct the command to run dotnet format
-# IMPORTANT: Removed --include-generated-files as it's causing an "Unrecognized argument" error.
-COMMAND_TO_RUN="dotnet format \"$SOLUTION_PATH\" --verify-no-changes --include \"$INCLUDED_FILES_ARG\""
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "==================================================="
+    echo "  Frontend Prettier issues detected in staged files."
+    echo "  Please run 'npm run lint-staged' in '$CLIENT_APP_DIR' to fix."
+    echo "==================================================="
+    exit 1 # Abort the commit
+  fi
 
-# Execute the command
-echo "Executing: $COMMAND_TO_RUN"
-eval "$COMMAND_TO_RUN"
+  # --- Knip Check ---
+  echo "Running Knip check for unused code in frontend..."
+  npm run knip
 
-# Check the exit code of dotnet format
-if [ $? -ne 0 ]; then
-  echo ""
-  echo "==================================================="
-  echo "  Code formatting issues detected."
-  echo "  Please run 'dotnet format' to fix them."
-  echo "==================================================="
-  exit 1 # Abort the commit
+  if [ $? -ne 0 ]; then
+    echo ""
+    echo "==================================================="
+    echo "  Knip detected unused code/dependencies in frontend."
+    echo "  Please run 'npm run knip' in '$CLIENT_APP_DIR' for details."
+    echo "==================================================="
+    exit 1 # Abort the commit
+  fi
+
+  # Change back to the root directory after frontend checks (optional, but good practice)
+  # This ensures subsequent hooks or commands are run from the correct location
+  # cd - > /dev/null # 'cd -' goes back to previous directory, > /dev/null silences output
+  # Or explicitly:
+  # cd "$OLDPWD" # OLDPWD stores the previous working directory
+else
+  echo "ClientApp directory not found. Skipping frontend checks."
 fi
 
+echo "All pre-commit checks passed!"
 exit 0 # Allow the commit
