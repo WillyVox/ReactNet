@@ -1,8 +1,0 @@
-{
-    "scripts": {
-        "start": "concurrently \"dotnet run\" \"npm --prefix ClientApp run dev\""
-    },
-    "devDependencies": {
-        "concurrently": "^9.1.2"
-    }
-}

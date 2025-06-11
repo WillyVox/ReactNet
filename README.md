@@ -21,9 +21,11 @@ Build React app with a .NET backend
 
         2. 
         <Target Name="StartVite" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-            <Exec WorkingDirectory="ClientApp" Command="nohup npm run dev > vite.log 2>&1 &" />
+            <Exec WorkingDirectory="$(SpaRoot)" Command="nohup npm run dev &amp;> vite-dev.log &amp;"/>
         </Target>
+        
         3. Run $ dotnet run // to start both .Net server and Vite app
+    
     Option 2: Node configuration to root
         1. $ echo "" > package.json
             {
