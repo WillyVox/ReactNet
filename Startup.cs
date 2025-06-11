@@ -78,7 +78,7 @@ namespace ReactNet
 
                 if (env.IsDevelopment())
                 {
-                    // spa.UseReactDevelopmentServer(npmScript: "dev");
+                    // spa.UseReactDevelopmentServer(npmScript: "start");
                     spa.UseProxyToSpaDevelopmentServer("http://localhost:5173"); // Vite's default dev port
                 }
             });
