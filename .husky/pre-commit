@@ -1,0 +1,42 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh" # If using Husky
+
+echo "Running dotnet format check for staged files..."
+
+# Get list of staged C# files
+# --cached: look at staged files
+# --name-only: just list names
+# --diff-filter=ACM: only A(dded), C(opied), M(odified) files
+FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$')
+
+# Define your solution or project file path relative to the repo root
+SOLUTION_PATH="ReactNet.csproj"
+
+# Check if there are any staged C# files
+if [ -z "$FILES" ]; then
+  echo "No .cs files staged. Skipping dotnet format check."
+  exit 0 # Allow the commit
+fi
+
+# Use 'tr' to convert newlines to spaces for --include
+INCLUDED_FILES_ARG=$(echo "$FILES" | tr '\n' ' ')
+
+# Construct the command to run dotnet format
+# IMPORTANT: Removed --include-generated-files as it's causing an "Unrecognized argument" error.
+COMMAND_TO_RUN="dotnet format \"$SOLUTION_PATH\" --verify-no-changes --include \"$INCLUDED_FILES_ARG\""
+
+# Execute the command
+echo "Executing: $COMMAND_TO_RUN"
+eval "$COMMAND_TO_RUN"
+
+# Check the exit code of dotnet format
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "==================================================="
+  echo "  Code formatting issues detected."
+  echo "  Please run 'dotnet format' to fix them."
+  echo "==================================================="
+  exit 1 # Abort the commit
+fi
+
+exit 0 # Allow the commit

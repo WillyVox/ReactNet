@@ -1,0 +1,142 @@
+
+# This file is the top-most EditorConfig file
+root = true
+
+# Primary language for this project (C#)
+[*.cs]
+# Core EditorConfig properties
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# C# Code Style Rules (IDE00xx, CAxxxx)
+# These rules apply to the .NET Code Style and .NET Analyzers.
+# For a comprehensive list and explanation, refer to Microsoft's documentation:
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/
+# https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/
+
+# Naming conventions
+# You can define custom naming conventions here.
+# For example, private fields with underscore prefix:
+# dotnet_naming_rule.private_fields.symbols = private_fields
+# dotnet_naming_rule.private_fields.style = camel_case_underscore_prefix
+# dotnet_naming_rule.private_fields.severity = suggestion
+# dotnet_naming_symbols.private_fields.applicable_kinds = field
+# dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+# dotnet_naming_style.camel_case_underscore_prefix.capitalization = camel_case
+# dotnet_naming_style.camel_case_underscore_prefix.required_prefix = _
+
+# Naming conventions (example for types, methods, etc.) - these are often default anyway
+dotnet_naming_rule.types.symbols = types
+dotnet_naming_rule.types.style = pascal_case
+dotnet_naming_rule.types.severity = suggestion
+dotnet_naming_symbols.types.applicable_kinds = class, struct, interface, enum, delegate
+dotnet_naming_symbols.types.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+dotnet_naming_rule.methods.symbols = methods
+dotnet_naming_rule.methods.style = pascal_case
+dotnet_naming_rule.methods.severity = suggestion
+dotnet_naming_symbols.methods.applicable_kinds = method
+dotnet_naming_symbols.methods.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected
+dotnet_naming_style.pascal_case.capitalization = pascal_case
+
+# Code Style: Language preferences
+# Use 'var' when type is apparent (IDE0007)
+csharp_style_var_for_built_in_types = false:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = false:suggestion
+
+# Use expression body for members (IDE0025)
+csharp_style_expression_bodied_methods = false:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+csharp_style_expression_bodied_accessors = true:suggestion
+csharp_style_expression_bodied_constructors = false:suggestion
+csharp_style_expression_bodied_operators = false:suggestion
+csharp_style_expression_bodied_lambdas = true:suggestion
+csharp_style_expression_bodied_local_functions = false:suggestion
+
+# Use 'this.' or 'Me.' qualifiers (IDE0003, IDE0009)
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+
+# Order using directives (IDE0005)
+csharp_using_directive_placement = inside_namespace:suggestion
+dotnet_sort_system_directives_first = true:suggestion
+
+# Add braces for control statements (IDE0011)
+csharp_prefer_braces = true:suggestion
+
+# Prefer explicit type instead of 'var' for built-in types (IDE0007)
+csharp_style_var_for_built_in_types = false:suggestion
+
+# Simplify LINQ expressions (IDE0043)
+csharp_style_prefer_simplified_interpolation = true:suggestion
+
+# Code Style: Formatting Rules (IDEnnxx)
+# Place 'using' directives (IDE0005)
+csharp_using_directive_placement = inside_namespace:suggestion
+
+# New line preferences
+csharp_new_line_before_open_brace = all:true
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_new_line_between_query_clauses = true
+
+# Spaces preferences
+csharp_space_after_cast = false
+csharp_space_after_comma = true
+csharp_space_after_dot = false
+csharp_space_after_semicolon_in_for_statement = true
+csharp_space_before_colon_in_constructor_initializer = true
+csharp_space_before_comma = false
+csharp_space_before_dot = false
+csharp_space_before_semicolon_in_for_statement = false
+csharp_space_around_binary_operators = before_and_after
+csharp_space_around_equality_operators = before_and_after
+csharp_space_around_multiplicative_operators = before_and_after
+csharp_space_around_additive_operators = before_and_after
+csharp_space_around_shift_operators = before_and_after
+csharp_space_around_logical_operators = before_and_after
+csharp_space_around_bitwise_operators = before_and_after
+csharp_space_around_assignment_operators = before_and_after
+csharp_space_around_relational_operators = before_and_after
+
+# Parentheses preferences
+csharp_preserve_single_line_blocks = false
+csharp_preserve_single_line_statements = false
+csharp_space_within_parentheses = false
+csharp_space_within_square_brackets = false
+csharp_space_within_braces = true
+csharp_space_within_array_initializer_braces = true
+csharp_space_within_empty_brackets = false
+
+# Misc formatting rules
+csharp_preserve_formatting = true
+
+# Quality Rules (CAxxxx)
+# You can enable/disable specific quality rules here and set their severity.
+# Examples:
+# CA1000: Do not declare static members on generic types
+dotnet_analyzer_diagnostic.severity = suggestion
+# CA1710: Identifiers should have correct suffix
+dotnet_diagnostic.CA1710.severity = warning
+
+# Avoid using outdated types/members (CA1062)
+dotnet_diagnostic.CA1062.severity = warning # Validate arguments of public methods
+
+# Configure warnings as errors (optional, but good for CI/CD)
+# build_property.TreatWarningsAsErrors = true
+
+# Suppress specific warnings across the project (use with caution)
+# For example, to ignore nullable warnings in a specific file:
+# build_property.NoWarn = CS8601, CS8602
+# build_property.Nullable = enable # or disable for specific files
