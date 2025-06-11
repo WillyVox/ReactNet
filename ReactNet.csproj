@@ -7,6 +7,8 @@
     <IsPackable>false</IsPackable>
     <SpaRoot>ClientApp\</SpaRoot>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    <ViteDevCommand Condition="$([MSBuild]::IsOSPlatform('Windows'))">start cmd.exe /c &quot;npm run dev&quot;</ViteDevCommand>
+    <ViteDevCommand Condition="$([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('OSX'))">nohup npm run dev &amp;&gt; vite-dev.log &amp;</ViteDevCommand>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +23,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.4" />
   </ItemGroup>
   <Target Name="StartVite" BeforeTargets="Build" Condition="'$(Configuration)' == 'Debug'">
-    <Exec WorkingDirectory="$(SpaRoot)" Command="nohup npm run dev &amp;> vite-dev.log &amp;"/>
+    <Exec WorkingDirectory="$(SpaRoot)" Command="$(ViteDevCommand)"/>
+    <Exec Command="sleep 5" Condition="$([MSBuild]::IsOSPlatform('Linux')) Or $([MSBuild]::IsOSPlatform('OSX'))" />
   </Target>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
