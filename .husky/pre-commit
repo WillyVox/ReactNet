@@ -7,8 +7,9 @@ echo "Running dotnet format check for staged files..."
 # --cached: look at staged files
 # --name-only: just list names
 # --diff-filter=ACM: only A(dded), C(opied), M(odified) files
-FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$')
-
+echo "HEHEHEHE."
+# FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$')
+echo "HEHEHEH 33333"
 # Define your solution or project file path relative to the repo root
 SOLUTION_PATH="ReactNet.csproj"
 

@@ -6,13 +6,12 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://react.dev" target="_blank">
-        </a>
+        <a href="https://react.dev" target="_blank"></a>
       </div>
       <h1>.Net + React</h1>
-      <FetchData/>
+      <FetchData />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

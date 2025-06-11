@@ -1,26 +1,26 @@
+{
+  "compilerOptions": {
+    // ... your existing compilerOptions ...
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
 
-   {
-     "compilerOptions": {
-       "target": "ESNext",
-       "useDefineForClassFields": true,
-       "lib": ["DOM", "DOM.Iterable", "ESNext"],
-       "allowJs": false,
-       "skipLibCheck": true,
-       "esModuleInterop": false,
-       "allowSyntheticDefaultImports": true,
-       "strict": true,
-       "forceConsistentCasingInFileNames": true,
-       "module": "ESNext",
-       "moduleResolution": "Node",
-       "resolveJsonModule": true,
-       "isolatedModules": true,
-       "noEmit": true,
-       "jsx": "react-jsx",
-       "baseUrl": ".",
-       "paths": {
-          "@/*": ["./src/*"]
-       }
-     },
-     "include": ["src"],
-     "references": [{ "path": "./tsconfig.node.json" }]
-   }
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx", // or "react" if you need old transform
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "vite.config.ts"], // <-- IMPORTANT: Ensure all files linted are included here
+  "references": [{ "path": "./tsconfig.node.json" }] // If you use separate tsconfig for node
+}
